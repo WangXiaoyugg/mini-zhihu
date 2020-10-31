@@ -4,12 +4,7 @@
       {{title}}
     </a>
     <div class="dropdown-menu" :style="{display: 'block'}" v-if="isOpen">
-      <li class="dropdown-item" href="#">
-        <a href="#">新建文章</a>
-      </li>
-      <li class="dropdown-item" href="#">
-        <a href="#">编辑资料</a>
-      </li>
+      <slot></slot>
     </div>
 </div>
 </template>
