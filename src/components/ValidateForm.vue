@@ -10,16 +10,41 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
+import { defineComponent, onUnmounted } from 'vue'
+import mitt from 'mitt'
+import { InputInstance } from './ValidateInput.vue'
+export const mitter = mitt()
+export interface FormInstance {
+  onSubmit: () => void;
+  resetForm: () => void;
+}
+type getInputInstance = () => InputInstance;
 export default defineComponent({
   emits: ['form-submit'],
   setup (props, context) {
+    let inputInstances: InputInstance[] = []
     const onSubmit = () => {
-      context.emit('form-submit', true)
+      const result = inputInstances.map(input => {
+        input.validate()
+      }).every(result => result)
+      context.emit('form-submit', result)
     }
+    const resetForm = () => {
+      inputInstances.forEach(input => input.reset())
+    }
+    const callback = (inputInstance: InputInstance) => {
+      inputInstances.push(inputInstance)   
+    }
+  
+    mitter.on<any>('form-item-created', callback)
+ 
+    onUnmounted(() => {
+      mitter.off<any>('form-item-created', callback)
+      inputInstances = []
+    })
     return {
-      onSubmit
+      onSubmit,
+      resetForm
     }
   }
 })
