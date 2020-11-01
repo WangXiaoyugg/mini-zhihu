@@ -4,7 +4,22 @@
     <form>
       <div class="mb-3">
         <label class="form-label">邮箱地址</label>
-        <validate-input :rules="emailRules" v-model="emailVal"></validate-input>
+        <validate-input 
+          :rules="emailRules" 
+          v-model="emailVal"
+          placeholder="this is email"
+          type='text'
+        ></validate-input>
+        {{ emailVal }}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">密码</label>
+        <validate-input 
+          :rules="emailRules" 
+          v-model="emailVal"
+          placeholder="this is password"
+          type='password'
+        ></validate-input>
         {{ emailVal }}
       </div>
     </form>
@@ -32,7 +47,7 @@ export default defineComponent({
     ValidateInput
   },
   setup () {
-    const emailVal = ref('garen')
+    const emailVal = ref('')
 
     return {
       // list: testData,
