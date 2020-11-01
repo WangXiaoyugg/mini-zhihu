@@ -4,14 +4,15 @@
     <form>
       <div class="mb-3">
         <label class="form-label">邮箱地址</label>
-        <validate-input :rules="emailRules"></validate-input>
+        <validate-input :rules="emailRules" v-model="emailVal"></validate-input>
+        {{ emailVal }}
       </div>
     </form>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import GlobalHeader, { UserProps } from './components/GlobalHeader.vue'
 import ValidateInput, { RulesProp } from './components/ValidateInput.vue'
@@ -31,10 +32,13 @@ export default defineComponent({
     ValidateInput
   },
   setup () {
+    const emailVal = ref('garen')
+
     return {
       // list: testData,
       currentUser,
-      emailRules
+      emailRules,
+      emailVal
     }
   }
 })

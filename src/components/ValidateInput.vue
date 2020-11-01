@@ -3,7 +3,8 @@
     <input type="text"
       class="form-control"
       :class="{'is-invalid': inputRef.error}"
-      v-model="inputRef.val"
+      :value="inputRef.val"
+      @input="updateVal"
       @blur="validateInput"
     >
     <span v-if="inputRef.error" class="invalid-feedback">{{inputRef.message}}</span>
@@ -21,14 +22,20 @@ interface RuleProp {
 export type RulesProp = RuleProp []
 export default defineComponent({
   props: {
-    rules: Array as PropType<RulesProp>
+    rules: Array as PropType<RulesProp>,
+    modelValue: String
   },
-  setup (props) {
+  setup (props, context) {
     const inputRef = reactive({
-      val: '',
+      val: props.modelValue || '',
       error: false,
       message: ''
     })
+    const updateVal = (e: KeyboardEvent) => {
+      const targetVal = (e.target as HTMLInputElement).value
+      inputRef.val = targetVal
+      context.emit('update:modelValue', targetVal)
+    }
     const validateInput = () => {
       if (props.rules) {
         const allPassed = props.rules.every(rule => {
@@ -51,7 +58,8 @@ export default defineComponent({
     }
     return {
       inputRef,
-      validateInput
+      validateInput,
+      updateVal
     }
   }
 })
